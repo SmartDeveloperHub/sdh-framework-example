@@ -1,0 +1,29 @@
+{
+  "name": "sdh-framework-example",
+  "homepage": "https://github.com/SmartDeveloperHub/sdh-framework-example",
+  "authors": [
+    "Alejandro Vera <xafilox@gmail.com>"
+  ],
+  "description": "This is an example of use of the SDH Framework.",
+  "main": "index.html",
+  "moduleType": [],
+  "keywords": [
+    "sdh-framework",
+    "sdh",
+    "framework",
+    "example",
+    "template"
+  ],
+  "license": "Apache License v2.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "vendor",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "sdh-framework": "master"
+  }
+}

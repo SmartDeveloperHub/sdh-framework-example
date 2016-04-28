@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>sdh-framework-example</title>
+    <script type="application/javascript">
+        SDH_API_URL = "https://sdh.conwet.fi.upm.es/sdhapi"; //Change this line in case you want to use another SDH-API
+    </script>
+    <script src="vendor/requirejs/require.js"></script>
+    <script>
+        require(['require-config.js'], function() {
+            require(['dashboard.js']);
+        });
+    </script>
+</head>
+<body>
+    <h1>sdh-framework-example</h1>
+    <div id="developers-table" style="width: 500px; display: inline-block;"></div>
+    <div id="developers-activity" style="width: 500px; display: inline-block;"></div>
+</body>
+</html>
