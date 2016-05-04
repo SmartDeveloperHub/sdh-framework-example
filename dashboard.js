@@ -23,18 +23,58 @@ require([
     "sdh-framework",
     "sdh-framework/widgets/Table/table",
     "sdh-framework/widgets/LinesChart/linesChart",
-    "css!nvd3"
+    "sdh-framework/widgets/PieChart/piechart",
+    "css!nvd3",
+    "css!bootstrap-css"
     /*, your other dependencies here */
 ], function() {
     framework.ready(function() {
         console.log("Framework ready");
 
         // CONTEXTS
-        var developerCtx = "developer-context";
+        var directorCtx = "director-context";
+        var pManagerCtx = "developer-context";
 
-        // TABLE OF DEVELOPERS
-        var table_dom = document.getElementById("developers-table");
-        var table_metrics = ['view-developers'];
+        // POST MODIFIERS
+        var toPercentagePostModifier = function toPercentagePostModifier(resourceData) {
+
+            var values = resourceData['data']['values'];
+            for(var x = 0; x < values.length; x++) {
+                values[x] = Math.round(values[x] * 100);
+            }
+
+            return resourceData;
+
+        };
+
+
+        // ------------------------------- SELECTION OF DIRECTOR -------------------------------
+        framework.data.observe([{ // We use the data layer to find a director
+            id: 'userlist'
+        }], function(framework_res) {
+
+            if(framework_res.event === 'data') { //First check that is a "data" event
+                var users = framework_res.data.userlist[0].data;
+                var director = 1; //This is the value of type "director"
+                for(var u = 0; u < users.length; ++u) {
+                    for(var orgId in users[u].positionsByOrgId) {
+                        if(users[u].positionsByOrgId[orgId].indexOf(director) !== -1) {
+
+                            // Update the context to make the dependant widgets change
+                            framework.data.updateContext(directorCtx, { uid: users[u].uid });
+                            return;
+                        }
+                    }
+
+                }
+            }
+
+        });
+
+
+        // ------------------------------- TABLE OF DEVELOPERS -------------------------------
+        var table_dom = document.getElementById("pmanagers-table");
+        var table_metrics = ['view-director-productmanagers'];
         var table_configuration = {
             columns: [
                 {
@@ -48,7 +88,7 @@ require([
             ],
             updateContexts: [
                 {
-                    id: developerCtx,
+                    id: pManagerCtx,
                     filter: [
                         {
                             property: "uid",
@@ -60,7 +100,7 @@ require([
             keepSelectedByProperty: "uid",
             selectable: true,
             minRowsSelected: 1,
-            maxRowsSelected: 1,
+            maxRowsSelected: 5,
             filterControl: true,
             initialSelectedRows: 1,
             showHeader: false,
@@ -68,26 +108,68 @@ require([
             scrollButtons: true,
             height: 568
         };
-        new framework.widgets.Table(table_dom, table_metrics, [], table_configuration);
+        new framework.widgets.Table(table_dom, table_metrics, [directorCtx], table_configuration);
 
-        // DEVELOPER ACTIVITY
-        var lines_dom = document.getElementById("developers-activity");
+
+        // ------------------------------- PRODUCT MANAGER ACTIVITY -------------------------------
+        var lines_dom = document.getElementById("pmanagers-activity");
         var lines_metrics = [
             {
-                id: 'member-activity',
-                max: 60
+                id: 'pmanager-activity',
+                max: 60,
+                post_modifier: toPercentagePostModifier
             }
         ];
         var lines_configuration = {
             xlabel: '',
-            ylabel: 'Activity',
+            ylabel: 'Activity (%)',
             interpolate: 'monotone',
             height: 300,
             labelFormat: '¬_D.data.info.uid.name¬',
-            area: true,
-            colors: ['#004C8B']
+            area: true
         };
-        new framework.widgets.LinesChart(lines_dom, lines_metrics, [developerCtx], lines_configuration);
+        new framework.widgets.LinesChart(lines_dom, lines_metrics, [pManagerCtx], lines_configuration);
+
+
+        // ------------------------------- TEAM MEMBERS ROLES (pie Chart) -------------------------------------
+        var team_members_pie_dom = document.getElementById("team-members-pie");
+        var team_members_pie_metrics = [
+            {
+                id: 'pmanager-stakeholders',
+                max: 1,
+                aggr: "sum",
+                post_aggr: 'sum'
+            },
+            {
+                id: 'pmanager-swdevelopers',
+                max: 1,
+                aggr: "sum",
+                post_aggr: 'sum'
+            },
+            {
+                id: 'pmanager-pjmanagers',
+                max: 1,
+                aggr: "sum",
+                post_aggr: 'sum'
+            },
+            {
+                id: 'pmanager-swarchitects',
+                max: 1,
+                aggr: "sum",
+                post_aggr: 'sum'
+            }
+        ];
+        var team_members_pie_configuration = {
+            height: 250,
+            showLegend: true,
+            showLabels: false,
+            labelFormat: "¬_D.data.info.title¬",
+            maxDecimals: 0
+        };
+        new framework.widgets.PieChart(team_members_pie_dom, team_members_pie_metrics,
+            [pManagerCtx], team_members_pie_configuration);
 
     });
+
+
 });
