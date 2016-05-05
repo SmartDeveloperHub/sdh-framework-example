@@ -45,10 +45,8 @@ require.config({
     ],
     paths: {
         'require-css': 'vendor/require-css/css',
-        'headerHandler': "assets/js/header/headerHandler",
         'bootstrap': "vendor/bootstrap/dist/js/bootstrap.min",
         'bootstrap-css': "vendor/bootstrap/dist/css/bootstrap.min",
-        'widgetCommon': 'vendor/sdh-framework/widgets/Common/common',
         'backbone': 'vendor/backbone/backbone-min',
         'underscore': 'vendor/underscore/underscore-min',
         'd3': "vendor/d3/d3.min",
@@ -57,7 +55,6 @@ require.config({
         'jquery-ui': 'vendor/jquery-ui/ui',
         'moment': "vendor/moment/moment",
         'lodash': 'vendor/lodash/lodash.min',
-        'gridstack': 'vendor/gridstack/dist/gridstack',
         'joint': 'vendor/joint/dist/joint.min',
         'cytoscape': 'vendor/cytoscape/dist/cytoscape',
         'cytoscape-qtip': 'vendor/cytoscape-qtip/cytoscape-qtip',
@@ -69,9 +66,6 @@ require.config({
         'nvd3': {
             exports: 'nv',
             deps: ['d3']
-        },
-        'headerHandler': {
-            deps: ['jquery']
         },
         'cytoscape': {
             exports: 'cytoscape',
