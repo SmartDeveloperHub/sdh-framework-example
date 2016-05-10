@@ -72,7 +72,7 @@ require([
         });
 
 
-        // ------------------------------- TABLE OF DEVELOPERS -------------------------------
+        // ------------------------------- TABLE OF PRODUCT MANAGERS -------------------------------
         var table_dom = document.getElementById("pmanagers-table");
         var table_metrics = ['view-director-productmanagers'];
         var table_configuration = {
